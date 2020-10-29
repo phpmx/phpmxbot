@@ -17,11 +17,10 @@ You can start contributing to this project by following the Quick Start guide be
 ## Quick Start
 
 1. Clone this repo in your computer.
-1. Create a Slack Application.
 1. Duplicate `config.example.ini` and rename it as `config.ini`.
-1. Update the token value in `config.ini` with your Slack Bot token.
 1. Run the following command: `php db/bootstrap.php your_admin_password` where `your_admin_password` is a password for the `admin` user.
 1. Start the local bot and ngrok processes with `docker-compose up`.
+1. (Only the first time) [Setup your Slack Application](https://github.com/phpmx/phpmxbot/wiki/Slack-setup).
 
 ## Contribute
 
