@@ -1,0 +1,20 @@
+{
+  "name": "phpmx/phpmxbot",
+  "type": "project",
+  "require": {
+    "botman/botman": "^2.6",
+    "botman/driver-slack": "^2.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "PhpMx\\": "src/"
+    }
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Erick Ruiz de Chavez",
+      "email": "erick@erch.co"
+    }
+  ]
+}

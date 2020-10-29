@@ -1,0 +1,10 @@
+# OS
+.DS_Store
+
+# Editor/IDE
+.vscode
+
+# Project
+vendor
+config.ini
+db/phpmxbot.db

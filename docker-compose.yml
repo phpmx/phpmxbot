@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  bot:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    command: php -S 0.0.0.0:8080 -t /app
+  ngrok:
+    image: "wernight/ngrok"
+    ports:
+      - "4040:4040"
+    command: ngrok http bot:8080
