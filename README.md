@@ -12,7 +12,7 @@ This project, built by the community and for the community, uses the following l
 - [ngrok](https://ngrok.com)
 - [Adminer](https://www.adminer.org)
 
-You can start contributing to this project by following the Quick Start guide below, or read the [Wiki](https://github.com/eruizdechavez/phpmxbot/wiki) for a more detailed description and documentation.
+You can start contributing to this project by following the Quick Start guide below, or read the [Wiki](https://github.com/phpmx/phpmxbot/wiki) for a more detailed description and documentation.
 
 ## Quick Start
 
