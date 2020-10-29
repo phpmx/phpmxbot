@@ -47,42 +47,37 @@ class PlusPlusHandler
         return [$inc, $dec];
     }
 
+    private static function logPoints($user, $tokens, $points)
+    {
+        $db = new SQLite3(DB);
+
+        $sql = <<<SQL
+        INSERT INTO leaderboard ( user, token, points, method, timestamp )
+        VALUES (:user, :token, :points, :method, (SELECT strftime('%s', 'now')))
+        SQL;
+
+        $query = $db->prepare($sql);
+        $query->bindValue(':user', $user);
+        $query->bindValue(':points', $points);
+        $query->bindValue(':method', 'message');
+
+        foreach ($tokens as $token) {
+            $query->bindParam(':token', $token);
+            $query->execute();
+        }
+
+        $db->close();
+    }
+
     public static function updatePoints($user, $tokens)
     {
         $inc = $tokens[0];
         $dec = $tokens[1];
 
-        $db = new SQLite3(DB);
+        self::logPoints($user, $inc, 1);
+        self::logPoints($user, $dec, -1);
 
-        $sql = <<<SQL
-        INSERT INTO leaderboard ( user, token, points, method, timestamp )
-        VALUES (:user, :token, 1, :method, (SELECT strftime('%s', 'now')))
-        SQL;
-
-        $query = $db->prepare($sql);
-        $query->bindValue(':user', $user);
-        $query->bindValue(':method', 'message');
-
-        foreach ($inc as $token) {
-            $query->bindParam(':token', $token);
-            $query->execute();
-        }
-
-        $sql = <<<SQL
-        INSERT INTO leaderboard ( user, token, points, method, timestamp )
-        VALUES (:user, :token, -1, :method, (SELECT strftime('%s', 'now')))
-        SQL;
-
-        $query = $db->prepare($sql);
-        $query->bindValue(':user', $user);
-        $query->bindValue(':method', 'message');
-
-        foreach ($dec as $token) {
-            $query->bindParam(':token', $token);
-            $query->execute();
-        }
-
-        $tokens = array_merge([], $inc, $dec);
+        $tokens = [...$inc, ...$dec];
         $placeholders = implode(', ', array_map(fn($i) => ":token{$i}", range(0, count($tokens) - 1)));
 
         $sql = <<<SQL
@@ -90,6 +85,8 @@ class PlusPlusHandler
 			FROM leaderboard_month
 			WHERE token IN ( {$placeholders} )
 		SQL;
+
+        $db = new SQLite3(DB);
 
         $query = $db->prepare($sql);
         foreach ($tokens as $i => $token) {
