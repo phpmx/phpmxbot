@@ -47,7 +47,7 @@ class PlusPlusHandler
         return [$inc, $dec];
     }
 
-    public static function updatePoints($tokens)
+    public static function updatePoints($user, $tokens)
     {
         $inc = $tokens[0];
         $dec = $tokens[1];
@@ -55,12 +55,13 @@ class PlusPlusHandler
         $db = new SQLite3(DB);
 
         $sql = <<<SQL
-		INSERT INTO leaderboard ( token, points )
-			VALUES (:token, 1)
-			ON CONFLICT (token)
-			DO UPDATE SET points=points+1
-		SQL;
+        INSERT INTO leaderboard ( user, token, points, method, timestamp )
+        VALUES (:user, :token, 1, :method, (SELECT strftime('%s', 'now')))
+        SQL;
+
         $query = $db->prepare($sql);
+        $query->bindValue(':user', $user);
+        $query->bindValue(':method', 'message');
 
         foreach ($inc as $token) {
             $query->bindParam(':token', $token);
@@ -68,12 +69,13 @@ class PlusPlusHandler
         }
 
         $sql = <<<SQL
-		INSERT INTO leaderboard ( token, points )
-			VALUES (:token, -1)
-			ON CONFLICT (token)
-			DO UPDATE SET points=points-1
-		SQL;
+        INSERT INTO leaderboard ( user, token, points, method, timestamp )
+        VALUES (:user, :token, -1, :method, (SELECT strftime('%s', 'now')))
+        SQL;
+
         $query = $db->prepare($sql);
+        $query->bindValue(':user', $user);
+        $query->bindValue(':method', 'message');
 
         foreach ($dec as $token) {
             $query->bindParam(':token', $token);
@@ -85,7 +87,7 @@ class PlusPlusHandler
 
         $sql = <<<SQL
 		SELECT *
-			FROM leaderboard
+			FROM leaderboard_month
 			WHERE token IN ( {$placeholders} )
 		SQL;
 
@@ -111,7 +113,7 @@ class PlusPlusHandler
 
         $sql = <<<SQL
 		SELECT *
-			FROM leaderboard
+			FROM leaderboard_month
 			ORDER BY points DESC
 			LIMIT $count
 		SQL;
@@ -142,8 +144,9 @@ class PlusPlusHandler
             return;
         }
 
+        $user = $event['user'] ?? 'unknown';
         $tokens [$type][] = "<@{$event['item_user']}>";
 
-        return self::updatePoints($tokens);
+        return self::updatePoints($user, $tokens);
     }
 }
