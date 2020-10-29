@@ -20,7 +20,10 @@ $botman = BotManFactory::create($config);
 $botman->hears('.*(\+\+|\-\-).*', function (BotMan $bot) {
     $msg = $bot->getMessage()->getText();
     $tokens = PlusPlusHandler::tokenize($msg);
-    $points = PlusPlusHandler::updatePoints($tokens);
+
+    $payload = $bot->getMessage()->getPayload();
+    $user = $payload['user'] ?? 'unknown';
+    $points = PlusPlusHandler::updatePoints($user, $tokens);
 
     $bot->replyInThread('Points updated!', MessageHandler::arrayToBlocks($points));
 });
