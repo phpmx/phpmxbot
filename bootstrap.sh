@@ -14,21 +14,8 @@ fi
 
 echo "Testing for db/phpmxbot.db..."
 if [ ! -f "db/phpmxbot.db" ]; then
-	echo "No db/phpmxbot.db found, creating from template..."
-
-	# Disable terminal echoing to avoid showing the password
-	stty_orig=$(stty -g)
-	stty -echo
-
-	# Ask for a password
-	IFS= read -s -p "SQLite Password for 'admin' user: " passwd
-
-	# Restore terminal echoing
-	stty "$stty_orig"
-	echo ""
-
-	# Generate a new SQLite from SQL template
-	docker run --rm -ti -v $PWD:/app -w /app php:7.4-cli-alpine php db/bootstrap.php "$passwd"
+	echo "No db/phpmxbot.db found, running initial migration..."
+	./migrate.sh
 fi
 
 echo "Testing for vendor..."

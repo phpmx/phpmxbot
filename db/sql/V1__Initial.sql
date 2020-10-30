@@ -6,7 +6,7 @@ CREATE TABLE "login" (
   "password" text NOT NULL
 );
 CREATE UNIQUE INDEX "login_username" ON "login" ("username");
-INSERT INTO "login" ("username", "password") VALUES ('admin',	'%%PASSWORD_HASH%%');
+INSERT INTO "login" ("username", "password") VALUES ('admin',	'$2y$10$XO7ktu7ijKbeBwowKyVME.Xhn.9vgZCmJMyOklOx1Lh7FWUnKbBOu');
 
 DROP TABLE IF EXISTS "leaderboard";
 CREATE TABLE "leaderboard" (
