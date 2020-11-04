@@ -2,6 +2,9 @@
   "name": "phpmx/phpmxbot",
   "type": "project",
   "require": {
+    "php": "^7.4",
+    "ext-json": "*",
+    "ext-sqlite3": "*",
     "botman/botman": "^2.6",
     "botman/driver-slack": "^2.2"
   },
