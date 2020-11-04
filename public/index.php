@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\BotManFactory;
@@ -13,7 +13,7 @@ use Tightenco\Collect\Support\Collection;
 
 DriverManager::loadDriver(SlackDriver::class);
 
-$config = parse_ini_file(__DIR__ . '/config.ini', true);
+$config = parse_ini_file(__DIR__ . '/../config.ini', true);
 $botman = BotManFactory::create($config);
 
 // TODO: Move all handlers to their own file/class
