@@ -6,7 +6,7 @@ services:
       - "8080:8080"
     volumes:
       - .:/app
-    working_dir: /app
+    working_dir: /app/public
     command: php -S 0.0.0.0:8080
   ngrok:
     image: "wernight/ngrok"
