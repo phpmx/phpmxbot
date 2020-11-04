@@ -1,9 +1,19 @@
 
 version: '3.7'
 
+networks:
+  web:
+    name: web
+
 services:
   web:
     image: indava/php:7.4
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
+      - "traefik.http.routers.web.entrypoints=websecure"
+      - "traefik.http.routers.web.tls.certresolver=phpmx"
+      - "traefik.http.routers.web.rule=Host(`bot.phpmexico.mx`)"
     environment:
       - APP_ENV=prod
       - WEB_ROOT=public
