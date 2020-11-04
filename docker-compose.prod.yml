@@ -1,0 +1,16 @@
+
+version: '3.7'
+
+services:
+  web:
+    image: indava/php:7.4
+    ports:
+      - 8080:80
+    environment:
+      - APP_ENV=prod
+      - WEB_ROOT=public
+      - PHP_TIMEZONE=America/Mexico_City
+      - PHP_MEMORY=64M
+      - APACHE_RUN_USER=web
+    volumes:
+      - ./:/var/www/html
