@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpMx;
+namespace PhpMx\Handlers;
 
 require_once __DIR__ . '/../constants.inc.php';
 
 use SQLite3;
 
-class PlusPlusHandler
+class PlusPlus
 {
     public static function tokenize($msg)
     {

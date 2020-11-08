@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpMx;
+namespace PhpMx\Handlers;
 
-class MessageHandler
+class Message
 {
     private static function getEmptySection()
     {
