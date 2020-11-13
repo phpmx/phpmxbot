@@ -6,5 +6,5 @@ use BotMan\BotMan\BotMan;
 
 interface ConversationInterface
 {
-    public function subscriber(BotMan $botMan);
+    public function subscribe(BotMan $botman);
 }

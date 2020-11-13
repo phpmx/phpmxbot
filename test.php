@@ -7,16 +7,18 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Dotenv\Dotenv;
 use BotMan\BotMan\BotMan;
 use PhpMx\Router;
+use PhpMx\Test;
 
-require 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 $dotenv = new Dotenv();
-$dotenv->load(__DIR__.'/.env');
+$dotenv->load(__DIR__ . '/.env');
 
 $containerBuilder = new ContainerBuilder();
 $loader = new YamlFileLoader($containerBuilder, new FileLocator(__DIR__ . '/config'));
 $loader->load('services.yaml');
 $containerBuilder->compile(true);
+
 $botman = $containerBuilder->get(BotMan::class);
 
 $faker = new FakeDriver();

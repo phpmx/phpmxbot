@@ -7,23 +7,23 @@ services:
   SQLite3:
     class: SQLite3
     arguments:
-      - '%env(DB_FILE)%'
+      - "../%env(DB_FILE)%"
 
   BotMan\BotMan\BotMan:
-    factory: [ 'BotMan\BotMan\BotManFactory', 'create' ]
+    factory: ['BotMan\BotMan\BotManFactory', "create"]
     arguments:
       - slack:
-          token: '%env(SLACK_TOKEN)%'
+          token: "%env(SLACK_TOKEN)%"
     calls:
-      - setContainer: [ '@service_container' ]
+      - setContainer: ["@service_container"]
 
   PhpMx\Conversation\:
-    resource: '../src/Conversation/*'
+    resource: "../src/Conversation/*"
     tags:
       - conversations
 
   PhpMx\Services\:
-    resource: '../src/Services/*'
+    resource: "../src/Services/*"
     tags:
       - services
 

@@ -1,26 +1,26 @@
 <?php
 
-namespace PhpMx\Handlers;
+namespace PhpMx\Services;
 
 use SQLite3;
 
-class PlusPlus
+class Leaderboard
 {
-    public static function tokenize($msg)
-    {
+    private $db;
 
+    public function __construct(SQLite3 $db)
+    {
+        $this->db = $db;
     }
 
-    private static function logPoints($user, $tokens, $points)
+    private function logPoints($user, $tokens, $points)
     {
-        $db = new SQLite3(DB);
-
         $sql = <<<SQL
         INSERT INTO leaderboard ( user, token, points, method, timestamp )
         VALUES (:user, :token, :points, :method, (SELECT strftime('%s', 'now')))
         SQL;
 
-        $query = $db->prepare($sql);
+        $query = $this->db->prepare($sql);
         $query->bindValue(':user', $user);
         $query->bindValue(':points', $points);
         $query->bindValue(':method', 'message');
@@ -29,17 +29,15 @@ class PlusPlus
             $query->bindParam(':token', $token);
             $query->execute();
         }
-
-        $db->close();
     }
 
-    public static function updatePoints($user, $tokens)
+    public function updatePoints($user, $tokens)
     {
         $inc = $tokens[0];
         $dec = $tokens[1];
 
-        self::logPoints($user, $inc, 1);
-        self::logPoints($user, $dec, -1);
+        $this->logPoints($user, $inc, 1);
+        $this->logPoints($user, $dec, -1);
 
         $tokens = [...$inc, ...$dec];
         $placeholders = implode(', ', array_map(fn($i) => ":token{$i}", range(0, count($tokens) - 1)));
@@ -50,9 +48,7 @@ class PlusPlus
 			WHERE token IN ( {$placeholders} )
 		SQL;
 
-        $db = new SQLite3(DB);
-
-        $query = $db->prepare($sql);
+        $query = $this->db->prepare($sql);
         foreach ($tokens as $i => $token) {
             $query->bindValue(":token{$i}", $token);
         }
@@ -63,15 +59,11 @@ class PlusPlus
             $points[$row['token']] = $row['points'];
         }
 
-        $db->close();
-
         return $points;
     }
 
-    public static function leaderboard($count = 10)
+    public function getLeaderboard($count = 10)
     {
-        $db = new SQLite3(DB);
-
         $sql = <<<SQL
 		SELECT *
 			FROM leaderboard_month
@@ -79,18 +71,16 @@ class PlusPlus
 			LIMIT $count
 		SQL;
 
-        $result = $db->query($sql);
+        $result = $this->db->query($sql);
         $points = [];
         while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
             $points[$row['token']] = $row['points'];
         }
 
-        $db->close();
-
         return $points;
     }
 
-    public static function reaction($event, $added = true)
+    public function reaction($event, $added = true)
     {
         $tokens = [[], []];
         $type = -1;
@@ -108,6 +98,6 @@ class PlusPlus
         $user = $event['user'] ?? 'unknown';
         $tokens [$type][] = "<@{$event['item_user']}>";
 
-        return self::updatePoints($user, $tokens);
+        return $this->updatePoints($user, $tokens);
     }
 }

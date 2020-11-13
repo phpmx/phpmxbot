@@ -3,38 +3,28 @@
 namespace PhpMx\Conversation;
 
 use BotMan\BotMan\BotMan;
-use SQLite3;
+use PhpMx\Services\Message;
+use PhpMx\Services\Leaderboard as LeaderboardService;
 
 class Leaderboard implements ConversationInterface
 {
-    private $db;
+    private $leaderboard;
+    private $message;
 
-    public function __construct(SQLite3 $db)
+    public function __construct(LeaderboardService $leaderboard, Message $message)
     {
-        $this->db = $db;
+        $this->leaderboard = $leaderboard;
+        $this->message = $message;
     }
 
-    public function __invoke(BotMan $botman)
+    public function __invoke(BotMan $bot)
     {
-        $sql = <<<SQL
-		SELECT *
-			FROM leaderboard_month
-			ORDER BY points DESC
-			LIMIT 10
-		SQL;
-
-        $result = $this->db->query($sql);
-        $points = [];
-        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-            $points[$row['token']] = $row['points'];
-        }
-        $this->db->close();
-
-        return $points;
+        $leaderboard = $this->leaderboard->getLeaderboard(10);
+        $bot->replyInThread('Top Leaderboard', $this->message->arrayToBlocks($leaderboard));
     }
 
-    public function subscriber(BotMan $botMan)
+    public function subscribe(BotMan $botman)
     {
-        $botMan->hears('leaderboard', $this);
+        $botman->hears('leaderboard', $this);
     }
 }
