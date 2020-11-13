@@ -3,24 +3,29 @@
 namespace PhpMx;
 
 use BotMan\BotMan\BotMan;
-use PhpMx\Interfaces\Route;
+use PhpMx\Conversation\ConversationInterface;
+use Psr\Container\ContainerInterface;
 
 class Router
 {
-    public static function route(BotMan $botman)
-    {
-        // Autoload Routes
-        $handle = dir(__DIR__ . '/Routes');
-        while ($item = $handle->read()) {
-            if (substr($item, -4) === '.php') {
-                $class = substr($item, 0, -4);
-                $class = __NAMESPACE__ . "\\Routes\\{$class}";
+    private $botman;
+    private $container;
 
-                $route = new $class($botman);
-                if ($route instanceof Route) {
-                    $route->init();
-                }
+    public function __construct(BotMan $botman, ContainerInterface $container)
+    {
+        $this->botman = $botman;
+        $this->container = $container;
+    }
+
+    public function mount(): void
+    {
+        /** @var Con $conversation */
+        foreach ($this->container->findTaggedServiceIds('conversations') as $name => $c) {
+            $conversation = $this->container->get($name);
+            if ($conversation instanceof ConversationInterface) {
+                $conversation->subscriber($this->botman);
             }
         }
     }
+
 }
