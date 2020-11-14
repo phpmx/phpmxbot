@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpMx;
+namespace PhpMx\Services;
 
-class MessageHandler
+class Message
 {
-    private static function getEmptySection()
+    private function getEmptySection()
     {
         return [
             'type' => 'section',
@@ -12,14 +12,14 @@ class MessageHandler
         ];
     }
 
-    public static function arrayToBlocks($array)
+    public function arrayToBlocks($array)
     {
-        $blocks = [self::getEmptySection()];
+        $blocks = [$this->getEmptySection()];
 
         $section = 0;
         foreach ($array as $key => $value) {
             if (count($blocks[$section]['fields']) === 10) {
-                $blocks[] = self::getEmptySection();
+                $blocks[] = $this->getEmptySection();
                 $section++;
             }
 

@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-echo "Testing for config.ini..."
-if [ ! -f "config.ini" ]; then
-	echo "No config.ini found, creating from template..."
-	cp config.example.ini config.ini
-fi
-
 echo "Testing for .env..."
 if [ ! -f ".env" ]; then
 	echo "No .env found, creating from template..."

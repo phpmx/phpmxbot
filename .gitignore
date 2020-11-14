@@ -6,6 +6,5 @@
 
 # Project
 vendor
-config.ini
 db/phpmxbot.db
 .env

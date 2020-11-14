@@ -1,0 +1,30 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  SQLite3:
+    class: SQLite3
+    arguments:
+      - "../%env(DB_FILE)%"
+
+  BotMan\BotMan\BotMan:
+    factory: ['BotMan\BotMan\BotManFactory', "create"]
+    arguments:
+      - slack:
+          token: "%env(SLACK_TOKEN)%"
+    calls:
+      - setContainer: ["@service_container"]
+
+  PhpMx\Conversation\:
+    resource: "../src/Conversation/*"
+    tags:
+      - conversations
+
+  PhpMx\Services\:
+    resource: "../src/Services/*"
+    tags:
+      - services
+
+  PhpMx\Router:
