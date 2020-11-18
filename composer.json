@@ -1,6 +1,6 @@
 {
   "name": "phpmx/phpmxbot",
-  "description": "phpbot",
+  "description": "PHP Mexico's Community Bot",
   "type": "project",
   "require": {
     "php": "^7.4",
@@ -18,6 +18,11 @@
       "PhpMx\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "PhpMx\\Tests\\": "tests/"
+    }
+  },
   "license": "MIT",
   "authors": [
     {
@@ -26,6 +31,7 @@
     }
   ],
   "require-dev": {
+    "phpunit/phpunit": "^9.4",
     "symfony/var-dumper": "^5.1"
   }
 }
