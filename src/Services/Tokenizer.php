@@ -26,18 +26,22 @@ class Tokenizer
         $buffer = [];
 
         while ($token = array_shift($msg)) {
-            if ($token !== '++' && $token !== '--' && preg_match('/^<@U[A-Z0-9]+>$/', $token) === 1) {
+            if (preg_match('/^<@U[A-Z0-9]+>$/', $token) === 1) {
                 $buffer[] = $token;
                 continue;
             }
 
             if ($token === '++') {
                 $inc = array_merge($inc, $buffer);
-            } else {
-                $dec = array_merge($dec, $buffer);
+                $buffer = [];
+                continue;
             }
 
-            $buffer = [];
+            if ($token === '--') {
+                $dec = array_merge($dec, $buffer);
+                $buffer = [];
+                continue;
+            }
         }
 
         return [$inc, $dec];
