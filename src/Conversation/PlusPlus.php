@@ -49,7 +49,12 @@ class PlusPlus implements ConversationInterface
         $event = json_decode($payload, true);
         $points = $this->leaderboard->reaction($event, $added);
 
-        $matchingMessage = new IncomingMessage("", $event['item_user'], $event['item']['channel'], Collection::make($event['item']));
+        $matchingMessage = new IncomingMessage(
+            "",
+            $event['item_user'],
+            $event['item']['channel'],
+            Collection::make($event['item'])
+        );
         $bot->replyInThread('Points updated!', $this->message->arrayToBlocks($points), $matchingMessage, $bot);
     }
 
