@@ -12,4 +12,8 @@ services:
     image: "wernight/ngrok"
     ports:
       - "4040:4040"
-    command: sh -c "if [ ! -z \"${NGROK_AUTH}\" ]; then ngrok authtoken ${NGROK_AUTH}; fi; ngrok http bot:8080"
+    environment:
+      NGROK_AUTH: "${NGROK_AUTH}"
+      NGROK_HOSTNAME: "${NGROK_HOSTNAME}"
+      NGROK_PORT: "${NGROK_PORT}"
+
