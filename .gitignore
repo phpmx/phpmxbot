@@ -8,3 +8,4 @@
 vendor
 db/phpmxbot.db
 .env
+/.phpunit.cache
