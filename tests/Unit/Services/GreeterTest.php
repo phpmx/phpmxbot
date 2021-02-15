@@ -29,20 +29,27 @@ final class GreeterTest extends TestCase
     public function testGetMessagesFor(string $channel, array $messages): void
     {
         $resultMock = $this->createMock(SQLite3Result::class);
+
+        // `fetchArray` is called inside a while loop, therefore it is
+        // count($messages) + 1 times, that is
+        // at least once even if the array is empty.
         $resultMock->expects($this->exactly(count($messages) + 1))
             ->method('fetchArray')
             ->with(SQLITE3_ASSOC)
             ->willReturnOnConsecutiveCalls(...$messages);
 
         $queryMock = $this->createMock(SQLite3Stmt::class);
+
         $queryMock->expects($this->once())
             ->method('bindValue')
             ->with(':channel', $channel);
+
         $queryMock->expects($this->once())
             ->method('execute')
             ->willReturn($resultMock);
 
         $sqlMock = $this->createMock(SQLite3::class);
+
         $sqlMock->expects($this->once())
             ->method('prepare')
             ->willReturn($queryMock);
