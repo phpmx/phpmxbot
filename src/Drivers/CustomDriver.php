@@ -21,6 +21,13 @@ class CustomDriver extends SlackDriver
             return $event;
         }
 
+        if ($payload->get('type') === 'event_callback' && $payload->get('event')['type'] === 'member_joined_channel') {
+            $event = new GenericEvent($payload);
+            $event->setName($payload->get('event')['type']);
+
+            return $event;
+        }
+
         parent::hasMatchingEvent();
     }
 }
