@@ -15,7 +15,7 @@ fi
 echo "Testing for vendor..."
 if [ ! -d "vendor" ]; then
 	echo "No vendor found, running composer install..."
-	docker run --rm -ti -v $PWD:/app composer install
+	docker run --rm -ti -v $PWD:/app composer:2.0.8 install
 fi
 
 echo "Done!"
