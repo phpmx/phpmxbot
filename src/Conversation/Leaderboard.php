@@ -20,7 +20,8 @@ class Leaderboard implements ConversationInterface
     public function __invoke(BotMan $bot)
     {
         $leaderboard = $this->leaderboard->getLeaderboard(10);
-        $bot->replyInThread('Top Leaderboard', $this->message->arrayToBlocks($leaderboard));
+        $title = '*Top Leaderboard*';
+        $bot->reply($title, $this->message->arrayToBlocks($leaderboard, $title));
     }
 
     public function subscribe(BotMan $botman)
