@@ -72,7 +72,7 @@ class PlusPlus implements ConversationInterface
 
     public function handleReactions($payload, BotMan $bot, bool $added)
     {
-        $event = json_decode($payload, true);
+        $event = $payload->get('event');
         $points = $this->leaderboard->reaction($event, $added);
 
         $matchingMessage = new IncomingMessage(
@@ -81,9 +81,9 @@ class PlusPlus implements ConversationInterface
             $event['item']['channel'],
             Collection::make($event['item'])
         );
-        $bot->replyInThread('Points updated!', $this->message->arrayToBlocks($points), $matchingMessage, $bot);
+        $title = '*Points updated!*';
+        $bot->replyInThread($title, $this->message->arrayToBlocks($points, $title), $matchingMessage, $bot);
     }
-
 
     public function subscribe(BotMan $botman)
     {
