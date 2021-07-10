@@ -28,6 +28,13 @@ class CustomDriver extends SlackDriver
             return $event;
         }
 
+        if ($payload->get('type') === 'event_callback' && ($payload->get('event')['type'] === 'reaction_added' || $payload->get('event')['type'] === 'reaction_removed')) {
+            $event = new GenericEvent($payload);
+            $event->setName($payload->get('event')['type']);
+
+            return $event;
+        }
+
         parent::hasMatchingEvent();
     }
 }
