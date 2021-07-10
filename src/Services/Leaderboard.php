@@ -7,6 +7,14 @@ use SQLite3;
 class Leaderboard
 {
     private $db;
+    private const REACTION_TARGET_USER = 'user';
+    private const REACTION_TARGET_SELF = 'self';
+
+    private array $knownReactions = [
+        'heavy_plus_sign' => [self::REACTION_TARGET_USER, 1],
+        'heavy_minus_sign' => [self::REACTION_TARGET_USER, -1],
+        'middle_finger' => [self::REACTION_TARGET_SELF, -100],
+    ];
 
     public function __construct(SQLite3 $db)
     {
@@ -31,13 +39,13 @@ class Leaderboard
         }
     }
 
-    public function updatePoints($user, $tokens)
+    public function updatePoints($user, $tokens, $points = 1)
     {
         $inc = $tokens[0];
         $dec = $tokens[1];
 
-        $this->logPoints($user, $inc, 1);
-        $this->logPoints($user, $dec, -1);
+        $this->logPoints($user, $inc, $points);
+        $this->logPoints($user, $dec, $points);
 
         $tokens = [...$inc, ...$dec];
         $placeholders = implode(', ', array_map(fn($i) => ":token{$i}", range(0, count($tokens) - 1)));
@@ -83,21 +91,22 @@ class Leaderboard
     public function reaction($event, $added = true)
     {
         $tokens = [[], []];
-        $type = -1;
+        $type = 0;
+        $modifier = $added ? 1 : -1;
 
-        if (strpos($event['reaction'], '+1') !== false) {
-            $type = $added ? 0 : 1;
-        } elseif (strpos($event['reaction'], '-1') !== false) {
-            $type = $added ? 1 : 0;
-        }
-
-        if ($type < 0) {
+        $reactionChange = $this->knownReactions[$event['reaction']];
+        if (!$reactionChange) {
             return;
         }
 
-        $user = $event['user'] ?? 'unknown';
-        $tokens [$type][] = "<@{$event['item_user']}>";
+        if ($modifier * $reactionChange[1] < 0) {
+            $type = 1;
+        }
 
-        return $this->updatePoints($user, $tokens);
+        $user = $event['user'] ?? 'unknown';
+        $targetUser = $reactionChange[0] === self::REACTION_TARGET_SELF ? $event['user'] : $event['item_user'];
+        $tokens[$type][] = "<@{$targetUser}>";
+
+        return $this->updatePoints($user, $tokens, $modifier * $reactionChange[1]);
     }
 }
