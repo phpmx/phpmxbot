@@ -12,11 +12,29 @@ class Message
         ];
     }
 
-    public function arrayToBlocks($array)
+    private function getTextSection($text)
     {
-        $blocks = [$this->getEmptySection()];
+        return [
+            'type' => 'section',
+            'text' => [
+                'type' => 'mrkdwn',
+                'text' => $text
+            ]
+        ];
+    }
 
+    public function arrayToBlocks($array, $title = '')
+    {
         $section = 0;
+        $blocks = [];
+
+        if (!empty($title)) {
+            $blocks[] = $this->getTextSection($title);
+            $section++;
+        }
+
+        $blocks[] = $this->getEmptySection();
+
         foreach ($array as $key => $value) {
             if (count($blocks[$section]['fields']) === 10) {
                 $blocks[] = $this->getEmptySection();
