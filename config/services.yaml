@@ -28,3 +28,8 @@ services:
       - services
 
   PhpMx\Router:
+
+  PhpMx\Services\RandomMessageSelector:
+    arguments:
+      - '%plus_plus.message_types%'
+      - '%plus_plus.messages%'

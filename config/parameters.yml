@@ -1,0 +1,44 @@
+parameters:
+  plus_plus.message_types:
+    - 'points_added'
+    - 'points_removed'
+    - 'points_restricted'
+
+  plus_plus.messages.points_added:
+    - '¡Felicidades!'
+    - '¡Lo tienes!'
+    - 'Bravo.'
+    - 'Bien hecho.'
+    - '¡Gran trabajo!'
+    - 'Exquisito.'
+    - 'Encantador.'
+    - 'Soberbio.'
+    - '¡Clásico!'
+    - 'Notorio.'
+    - '¡Bien, bien!'
+    - 'Bien jugado.'
+    - 'Mis más sinceras felicitaciones.'
+    - 'Delicioso.'
+    - ':nice:'
+    - ':nyan:'
+    - ':party'
+
+  plus_plus.messages.points_removed:
+    - '¿De verdad?',
+    - 'Oh :slightly_frowning_face:.',
+    - 'Ya veo.',
+    - 'Ouch.',
+    - 'Eso duele.',
+    - 'Oh.',
+    - 'Que mal.',
+    - 'Mis condolencias.',
+    - 'Suerte para la próxima',
+    - ':trollface:',
+    - ':sadpanda:'
+
+  plus_plus.messages.points_restricted:
+    - 'Hahahahahahaha no.',
+    - 'Nope.',
+    - 'No. Simplemente no.',
+    - ':facepalm:',
+    - ':wat:'
