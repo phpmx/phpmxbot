@@ -9,12 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 class GetRandomMessageByTypeTest extends TestCase
 {
-    private array $types = [
-        'points_added',
-        'points_removed',
-        'points_restricted',
-    ];
-
     private array $messages = [
         'points_added' => [
             'Points added message 1',
@@ -39,12 +33,12 @@ class GetRandomMessageByTypeTest extends TestCase
     {
         parent::setUp();
 
-        $this->getRandomMessageByType = new GetRandomMessageByType($this->types, $this->messages);
+        $this->getRandomMessageByType = new GetRandomMessageByType($this->messages);
     }
 
     public function testItShouldSelectARandomMessage(): void
     {
-        $type = $this->types[0];
+        $type = $this->getRandomMessageByType->getTypes()[0];
         $possibleMessages = $this->messages[$type];
 
         $message = ($this->getRandomMessageByType)($type);
@@ -61,26 +55,5 @@ class GetRandomMessageByTypeTest extends TestCase
 
         $type = 'undefined_type';
         ($this->getRandomMessageByType)($type);
-    }
-
-    public function testServiceShouldReceiveAValidTypesArray(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            'The message types cannot be empty, please add at least one entry.'
-        );
-
-        new GetRandomMessageByType([], []);
-    }
-
-    public function testServiceShouldReceiveAValidMessagesArray(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            'The messages array should contain one key for each message type, please add a set of messages for the following types [success, error].'
-        );
-
-        $types = ['success', 'error'];
-        new GetRandomMessageByType($types, []);
     }
 }

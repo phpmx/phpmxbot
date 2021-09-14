@@ -10,13 +10,10 @@ class GetRandomMessageByType
     private array $types;
     private array $messages;
 
-    public function __construct(array $types, array $messages)
+    public function __construct(array $messages)
     {
-        $this->validateTypes($types);
-        $this->validateMessages($types, $messages);
-
-        $this->types = $types;
         $this->messages = $messages;
+        $this->types = array_keys($messages);
     }
 
     /**
@@ -34,24 +31,13 @@ class GetRandomMessageByType
             throw new Exception($message);
         }
 
-        return array_rand($this->messages[$type]);
+        $randomIndex = array_rand($this->messages[$type]);
+
+        return $this->messages[$type][$randomIndex];
     }
 
-    private function validateTypes(array $types): void
+    public function getTypes(): array
     {
-        if (empty($types)) {
-            throw new InvalidArgumentException('The message types cannot be empty, please add at least one entry.');
-        }
-    }
-
-    private function validateMessages(array $types, array $messages): void
-    {
-        if (!in_array($types, array_keys($messages))) {
-            $message = sprintf(
-                'The messages array should contain one key for each message type, please add a set of messages for the following types [%s].',
-                implode(', ', $types)
-            );
-            throw new InvalidArgumentException($message);
-        }
+        return $this->types;
     }
 }
