@@ -29,7 +29,7 @@ services:
 
   PhpMx\Router:
 
-  PhpMx\Services\RandomMessageSelector:
+  PhpMx\Services\GetRandomMessageByType:
     arguments:
       - '%plus_plus.message_types%'
       - '%plus_plus.messages%'
