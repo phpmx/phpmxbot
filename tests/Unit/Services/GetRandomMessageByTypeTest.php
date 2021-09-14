@@ -56,7 +56,7 @@ class GetRandomMessageByTypeTest extends TestCase
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'Invalid "undefined_type" message type, please provide one of the following values [points_added, points_removed, points_restricted]'
+            'Invalid "undefined_type" message type, please provide one of the following values [points_added, points_removed, points_restricted].'
         );
 
         $type = 'undefined_type';
