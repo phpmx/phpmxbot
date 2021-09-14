@@ -24,21 +24,21 @@ parameters:
     - ':party'
 
   plus_plus.messages.points_removed:
-    - '¿De verdad?',
-    - 'Oh :slightly_frowning_face:.',
-    - 'Ya veo.',
-    - 'Ouch.',
-    - 'Eso duele.',
-    - 'Oh.',
-    - 'Que mal.',
-    - 'Mis condolencias.',
-    - 'Suerte para la próxima',
-    - ':trollface:',
+    - '¿De verdad?'
+    - 'Oh :slightly_frowning_face:.'
+    - 'Ya veo.'
+    - 'Ouch.'
+    - 'Eso duele.'
+    - 'Oh.'
+    - 'Que mal.'
+    - 'Mis condolencias.'
+    - 'Suerte para la próxima'
+    - ':trollface:'
     - ':sadpanda:'
 
   plus_plus.messages.points_restricted:
-    - 'Hahahahahahaha no.',
-    - 'Nope.',
-    - 'No. Simplemente no.',
-    - ':facepalm:',
+    - 'Hahahahahahaha no.'
+    - 'Nope.'
+    - 'No. Simplemente no.'
+    - ':facepalm:'
     - ':wat:'
