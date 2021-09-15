@@ -3,52 +3,48 @@
 namespace PhpMx\Tests\Unit\Services;
 
 use Exception;
-use PhpMx\Builders\MessageBuilder;
+use PhpMx\Builders\AdditionalParametersBuilder;
 use PHPUnit\Framework\TestCase;
 
-class MessageBuilderTest extends TestCase
+class ItTest extends TestCase
 {
-    public function testMessageBuilderShouldHaveAtLeastOneMessage(): void
+    public function testItShouldHaveAtLeastOneMessage(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Empty message, please add at least one element.');
 
-        $messageBuilder = new MessageBuilder();
-        $messageBuilder->toAdditionalParameters();
+        $additionalParametersBuilder = new AdditionalParametersBuilder();
+        $additionalParametersBuilder->build();
     }
 
-    public function testAddMarkdownShouldReturnAnInstanceOfMessageBuilder(): void
+    public function testItShouldNotAddParagraphsToEmptyMessages(): void
     {
-        $messageBuilder = MessageBuilder::create()->addMarkdown('Hello!');
-        $this->assertInstanceOf(MessageBuilder::class, $messageBuilder);
+        $additionalParametersBuilder = AdditionalParametersBuilder::create()
+            ->addParagraph();
+
+        $this->assertSame(1, $additionalParametersBuilder->getParagraphCount());
     }
 
-    public function testMessageBuilderShouldCreateSectionsAfterRebaseMaxSectionItems(): void
+    public function testAddMarkdownShouldReturnAnInstanceOfAdditionalParametersBuilder(): void
     {
-        $messageBuilder = MessageBuilder::create(2)
-            ->addMarkdown('Hello!')
-            ->addMarkdown('world')
-            ->addMarkdown('!!!')
-            ->addMarkdown('I am')
-            ->addMarkdown('the PHPmx')
-            ->addMarkdown('PlusPlus bot');
-
-        $this->assertSame(3, $messageBuilder->getSectionCount());
+        $additionalParametersBuilder = AdditionalParametersBuilder::create()->addRow('Hello!');
+        $this->assertInstanceOf(AdditionalParametersBuilder::class, $additionalParametersBuilder);
     }
 
-    public function testMessageBuilderRetrieveTheExpectedParameters(): void
+    public function testItRetrieveTheExpectedParameters(): void
     {
         $expectedParameters = [
             'blocks' => '[{"type":"section","fields":[{"type":"mrkdwn","text":"Hello world!"},{"type":"mrkdwn","text":"This is the PhpMxBot"},{"type":"mrkdwn","text":"And I love the PhpMx community"}]},{"type":"section","fields":[{"type":"mrkdwn","text":"Hope to keep learning a lot"},{"type":"mrkdwn","text":"With you <3"}]}]'
         ];
 
-        $additionalParameters = MessageBuilder::create(3)
-            ->addMarkdown('Hello world!')
-            ->addMarkdown('This is the PhpMxBot')
-            ->addMarkdown('And I love the PhpMx community')
-            ->addMarkdown('Hope to keep learning a lot')
-            ->addMarkdown('With you <3')
-            ->toAdditionalParameters();
+        $additionalParameters = AdditionalParametersBuilder::create()
+            ->addRow('Hello world!')
+            ->addRow('This is the PhpMxBot')
+            ->addRow('And I love the PhpMx community')
+            ->addParagraph()
+            ->addRow('Hope to keep learning a lot')
+            ->addRow('With you <3')
+            ->build();
 
         $this->assertSame($expectedParameters, $additionalParameters);
     }

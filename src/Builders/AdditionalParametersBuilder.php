@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpMx\Services;
+namespace PhpMx\Builders;
 
 use Exception;
 
-class MessageBuilder
+class AdditionalParametersBuilder
 {
     const EMPTY_SECTION = [
         'type' => 'section',
@@ -13,19 +13,13 @@ class MessageBuilder
 
     private int $currentSection = 0;
     private array $blocks = [self::EMPTY_SECTION];
-    private int $maxSectionItems;
 
-    public function __construct(int $maxSectionItems = 10)
+    public static function create(): self
     {
-        $this->maxSectionItems = $maxSectionItems;
+        return new self();
     }
 
-    public static function create(int $maxSectionItems = 10): self
-    {
-        return new self($maxSectionItems);
-    }
-
-    public function addMarkdown(string $message): self
+    public function addRow(string $message): self
     {
         $this->addField([
             'type' => 'mrkdwn',
@@ -35,7 +29,18 @@ class MessageBuilder
         return $this;
     }
 
-    public function toAdditionalParameters(): array
+    public function addParagraph(): self
+    {
+        $fieldCounter = count($this->blocks[$this->currentSection]['fields']);
+
+        if ($fieldCounter !== 0) {
+            $this->addSection();
+        }
+
+        return $this;
+    }
+
+    public function build(): array
     {
         $blocks = $this->blocksWithoutEmptySections();
 
@@ -48,7 +53,7 @@ class MessageBuilder
         ];
     }
 
-    public function getSectionCount(): int
+    public function getParagraphCount(): int
     {
         return count($this->blocks);
     }
@@ -62,12 +67,6 @@ class MessageBuilder
 
     private function addField(array $field): void
     {
-        $fieldsCounter = count($this->blocks[$this->currentSection]['fields']);
-
-        if ($fieldsCounter > 0 && $fieldsCounter % $this->maxSectionItems === 0) {
-            $this->addSection();
-        }
-
         $this->blocks[$this->currentSection]['fields'][] = $field;
     }
 
