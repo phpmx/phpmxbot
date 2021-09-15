@@ -3,7 +3,7 @@
 namespace PhpMx\Tests\Unit\Services;
 
 use Exception;
-use PhpMx\Services\MessageBuilder;
+use PhpMx\Builders\MessageBuilder;
 use PHPUnit\Framework\TestCase;
 
 class MessageBuilderTest extends TestCase
