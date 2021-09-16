@@ -39,8 +39,7 @@ class PlusPlus implements ConversationInterface
 
         if ($user !== 'unknown' && $this->tokenizer->hasToken($userToken, $increments)) {
             $increments = $this->tokenizer->excludeToken($userToken, $increments);
-            $message = ($this->getRandomMessageByType)(GetRandomMessageByType::NOT_ALLOWED);
-            $message = str_replace('{user}', $userToken, $message);
+            $message = ($this->getRandomMessageByType)(GetRandomMessageByType::NOT_ALLOWED, ['{user}' => $userToken]);
             $replyParameters->addMarkdown($message)->addDivider();
         }
 
@@ -51,8 +50,7 @@ class PlusPlus implements ConversationInterface
                 ? GetRandomMessageByType::INCREASED_POINTS
                 : GetRandomMessageByType::DECREASED_POINTS;
 
-            $message = ($this->getRandomMessageByType)($type);
-            $message = str_replace(['{user}', '{score}'], [$user, $score], $message);
+            $message = ($this->getRandomMessageByType)($type, ['{user}' => $user, '{score}' => $score]);
             $replyParameters->addMarkdown($message);
         }
 
