@@ -32,4 +32,17 @@ class Tokenizer
 
         return [$increments, $decrements];
     }
+
+    public function hasToken(string $token, array $tokens): bool
+    {
+        return in_array($token, $tokens);
+    }
+
+    public function excludeToken(string $token, array $tokens): array
+    {
+        return array_filter(
+            $tokens,
+            fn(string $identifier) => $identifier !== $token
+        );
+    }
 }
