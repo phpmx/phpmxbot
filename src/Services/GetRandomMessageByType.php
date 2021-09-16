@@ -27,7 +27,7 @@ class GetRandomMessageByType
         ];
     }
 
-    public function __invoke(string $type): string
+    public function __invoke(string $type, ?array $replacements = null): string
     {
         if (!in_array($type, self::MESSAGE_TYPES)) {
             $exceptionMessage = sprintf(
@@ -41,7 +41,15 @@ class GetRandomMessageByType
 
         $messages = $this->messages[$type];
         $randomIndex = array_rand($messages);
+        $message = $messages[$randomIndex];
 
-        return $messages[$randomIndex];
+        if ($replacements) {
+            $search = array_keys($replacements);
+            $replace = array_values($replacements);
+
+            $message = str_replace($search, $replace, $message);
+        }
+
+        return $message;
     }
 }

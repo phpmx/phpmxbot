@@ -32,7 +32,7 @@ parameters:
     - ':sadpanda: Aún tienes {score} puntos {user}.'
 
   plus_plus.not_allowed_messages:
-    - '{user}, Hahahahahahaha no.'
+    - '{user}, hahahahahahaha no.'
     - '{user}, nope.'
     - '{user}, no. Simplemente no.'
     - ':facepalm: {user}'

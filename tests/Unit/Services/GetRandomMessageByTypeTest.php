@@ -66,4 +66,21 @@ class GetRandomMessageByTypeTest extends TestCase
         $type = 'undefined_type';
         ($this->getRandomMessageByType)($type);
     }
+
+    public function testItShouldReplaceValues(): void
+    {
+        $user = "<@USRS8912>";
+        $score = 25;
+        $increasedMessages = ['Hi {user}!, your have {score} points.'];
+
+        $expectedMessage = 'Hi <@USRS8912>!, your have 25 points.';
+
+        $getRandomMessage = new GetRandomMessageByType($increasedMessages, [], []);
+        $message = $getRandomMessage(GetRandomMessageByType::INCREASED_POINTS, [
+            '{user}' => $user,
+            '{score}' => $score,
+        ]);
+
+        $this->assertSame($expectedMessage, $message);
+    }
 }
