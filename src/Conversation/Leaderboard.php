@@ -8,8 +8,8 @@ use PhpMx\Services\Leaderboard as LeaderboardService;
 
 class Leaderboard implements ConversationInterface
 {
-    private $leaderboard;
-    private $message;
+    private LeaderboardService $leaderboard;
+    private Message $message;
 
     public function __construct(LeaderboardService $leaderboard, Message $message)
     {

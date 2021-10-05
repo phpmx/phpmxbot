@@ -13,14 +13,17 @@ use Tightenco\Collect\Support\Collection;
 
 class PlusPlus implements ConversationInterface
 {
-    private $tokenizer;
-    private $leaderboard;
-    private $message;
+    private Tokenizer $tokenizer;
+    private Leaderboard $leaderboard;
+    private Message $message;
     private GetRandomMessageByType $getRandomMessageByType;
 
-    public function __construct(Tokenizer $tokenizer, Leaderboard $leaderboard,
-                                Message $message, GetRandomMessageByType $getRandomMessageByType)
-    {
+    public function __construct(
+        Tokenizer $tokenizer,
+        Leaderboard $leaderboard,
+        Message $message,
+        GetRandomMessageByType $getRandomMessageByType
+    ) {
         $this->tokenizer = $tokenizer;
         $this->leaderboard = $leaderboard;
         $this->message = $message;
@@ -59,7 +62,7 @@ class PlusPlus implements ConversationInterface
 
     public function handleReactionAdded($payload, BotMan $bot)
     {
-        $this->handleReactions($payload, $bot, true);
+        $this->handleReactions($payload, $bot);
     }
 
     public function handleReactionRemoved($payload, BotMan $bot)
@@ -67,7 +70,7 @@ class PlusPlus implements ConversationInterface
         $this->handleReactions($payload, $bot, false);
     }
 
-    public function handleReactions($payload, BotMan $bot, $added)
+    public function handleReactions($payload, BotMan $bot, bool $added = true)
     {
         $event = json_decode($payload, true);
         $points = $this->leaderboard->reaction($event, $added);
