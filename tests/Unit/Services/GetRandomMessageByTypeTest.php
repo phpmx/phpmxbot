@@ -4,20 +4,11 @@ namespace PhpMx\Tests\Unit\Services;
 
 use Exception;
 use PhpMx\Services\GetRandomMessageByType;
+use PhpMx\Services\SettingsRepository;
 use PHPUnit\Framework\TestCase;
 
 class GetRandomMessageByTypeTest extends TestCase
 {
-    private array $increasedMessages = [
-        'Increased message 1',
-        'Increased message 2',
-        'Increased message 3',
-    ];
-    private array $decreasedMessages = [
-        'Decreased message 1',
-        'Decreased message 2',
-        'Decreased message 3',
-    ];
     private array $notAllowedMessages = [
         'Not allowed message 1',
         'Not allowed message 2',
@@ -30,37 +21,29 @@ class GetRandomMessageByTypeTest extends TestCase
     {
         parent::setUp();
 
-        $this->getRandomMessageByType = new GetRandomMessageByType(
-            $this->increasedMessages,
-            $this->decreasedMessages,
-            $this->notAllowedMessages
-        );
+        $settingsRepository = $this->createMock(SettingsRepository::class);
+        $this->getRandomMessageByType = new GetRandomMessageByType($settingsRepository);
     }
 
-    /**
-     * @dataProvider getMessageTypesDataProvider
-     */
-    public function testItShouldSelectARandomMessage(string $type, array $possibleValues): void
+    public function testItShouldSelectARandomMessage(): void
     {
-        $message = ($this->getRandomMessageByType)($type);
+        $settingsRepository = $this->createMock(SettingsRepository::class);
+        $settingsRepository->expects($this->any())
+            ->method('getJsonSetting')
+            ->willReturn($this->notAllowedMessages);
 
-        $this->assertContains($message, $possibleValues);
-    }
+        $getRandomMessageByType = new GetRandomMessageByType($settingsRepository);
 
-    public function getMessageTypesDataProvider(): array
-    {
-        return [
-            [GetRandomMessageByType::INCREASED_POINTS, $this->increasedMessages],
-            [GetRandomMessageByType::DECREASED_POINTS, $this->decreasedMessages],
-            [GetRandomMessageByType::NOT_ALLOWED, $this->notAllowedMessages],
-        ];
+        $message = $getRandomMessageByType(GetRandomMessageByType::NOT_ALLOWED);
+
+        $this->assertContains($message, $this->notAllowedMessages);
     }
 
     public function testItShouldThrowAnExceptionIfMessageTypeIsNotDefined(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'The "undefined_type" type provided does not match with any registered type, please ensure to provide one of the following types [increased, decreased, not_allowed].'
+            'The "undefined_type" type provided does not match with any registered type, please ensure to provide one of the following types [points_increased_messages, points_decreased_messages, points_not_allowed_messages].'
         );
 
         $type = 'undefined_type';
@@ -75,7 +58,13 @@ class GetRandomMessageByTypeTest extends TestCase
 
         $expectedMessage = 'Hi <@USRS8912>!, your have 25 points.';
 
-        $getRandomMessage = new GetRandomMessageByType($increasedMessages, [], []);
+        $settingsRepository = $this->createMock(SettingsRepository::class);
+        $settingsRepository->expects($this->any())
+            ->method('getJsonSetting')
+            ->with(GetRandomMessageByType::INCREASED_POINTS)
+            ->willReturn($increasedMessages);
+
+        $getRandomMessage = new GetRandomMessageByType($settingsRepository);
         $message = $getRandomMessage(GetRandomMessageByType::INCREASED_POINTS, [
             '{user}' => $user,
             '{score}' => $score,

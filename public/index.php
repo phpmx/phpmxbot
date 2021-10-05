@@ -17,7 +17,6 @@ $dotenv->load(__DIR__ . '/../.env');
 $containerBuilder = new ContainerBuilder();
 $loader = new YamlFileLoader($containerBuilder, new FileLocator(__DIR__ . '/../config'));
 $loader->load('services.yaml');
-$loader->load('parameters.yaml');
 $containerBuilder->compile(true);
 
 $botman = $containerBuilder->get(BotMan::class);

@@ -6,9 +6,9 @@ use Exception;
 
 class GetRandomMessageByType
 {
-    public const INCREASED_POINTS = 'increased';
-    public const DECREASED_POINTS = 'decreased';
-    public const NOT_ALLOWED = 'not_allowed';
+    public const INCREASED_POINTS = 'points_increased_messages';
+    public const DECREASED_POINTS = 'points_decreased_messages';
+    public const NOT_ALLOWED = 'points_not_allowed_messages';
 
     public const MESSAGE_TYPES = [
         self::INCREASED_POINTS,
@@ -16,17 +16,18 @@ class GetRandomMessageByType
         self::NOT_ALLOWED,
     ];
 
-    private array $messages;
+    private SettingsRepository $settingsRepository;
 
-    public function __construct(array $increasedPointsMessages, array $decreasedPointsMessages, array $notAllowedMessages)
+    public function __construct(SettingsRepository $settingsRepository)
     {
-        $this->messages = [
-            self::INCREASED_POINTS => $increasedPointsMessages,
-            self::DECREASED_POINTS => $decreasedPointsMessages,
-            self::NOT_ALLOWED => $notAllowedMessages,
-        ];
+        $this->settingsRepository = $settingsRepository;
     }
 
+    /**
+     * @param string[][]|null $replacements
+     *
+     * @throws Exception
+     */
     public function __invoke(string $type, ?array $replacements = null): string
     {
         if (!in_array($type, self::MESSAGE_TYPES)) {
@@ -39,7 +40,7 @@ class GetRandomMessageByType
             throw new Exception($exceptionMessage);
         }
 
-        $messages = $this->messages[$type];
+        $messages = $this->settingsRepository->getJsonSetting($type);
         $randomIndex = array_rand($messages);
         $message = $messages[$randomIndex];
 

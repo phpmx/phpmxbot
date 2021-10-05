@@ -28,9 +28,3 @@ services:
       - services
 
   PhpMx\Router:
-
-  PhpMx\Services\GetRandomMessageByType:
-    arguments:
-      - '%plus_plus.increased_messages%'
-      - '%plus_plus.decreased_messages%'
-      - '%plus_plus.not_allowed_messages%'
