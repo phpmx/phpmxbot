@@ -62,7 +62,7 @@ class PlusPlus implements ConversationInterface
 
     public function handleReactionAdded($payload, BotMan $bot)
     {
-        $this->handleReactions($payload, $bot);
+        $this->handleReactions($payload, $bot, true);
     }
 
     public function handleReactionRemoved($payload, BotMan $bot)
@@ -70,7 +70,7 @@ class PlusPlus implements ConversationInterface
         $this->handleReactions($payload, $bot, false);
     }
 
-    public function handleReactions($payload, BotMan $bot, bool $added = true)
+    public function handleReactions($payload, BotMan $bot, bool $added)
     {
         $event = json_decode($payload, true);
         $points = $this->leaderboard->reaction($event, $added);
