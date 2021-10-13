@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\TaggedContainerInterface;
 
 class Router
 {
-    private $botman;
+    private BotMan $botman;
 
     /** @var TaggedContainerInterface $container */
     private $container;

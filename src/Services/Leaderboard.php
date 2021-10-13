@@ -6,7 +6,7 @@ use SQLite3;
 
 class Leaderboard
 {
-    private $db;
+    private SQLite3 $db;
 
     public function __construct(SQLite3 $db)
     {

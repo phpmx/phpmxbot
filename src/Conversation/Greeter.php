@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 class Greeter implements ConversationInterface
 {
-    private $greeterService;
+    private GreeterService $greeterService;
 
     public function __construct(GreeterService $greeterService)
     {
