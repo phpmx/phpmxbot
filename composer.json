@@ -11,7 +11,10 @@
     "symfony/dependency-injection": "^5.1",
     "symfony/yaml": "^5.1",
     "symfony/config": "^5.1",
-    "symfony/dotenv": "^5.1"
+    "symfony/dotenv": "^5.1",
+    "symfony/http-kernel": "5.1.8",
+    "symfony/routing": "5.1.8",
+    "symfony/framework-bundle": "5.1.8"
   },
   "autoload": {
     "psr-4": {

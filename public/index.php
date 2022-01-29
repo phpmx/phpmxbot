@@ -3,11 +3,8 @@
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
-use BotMan\BotMan\Drivers\DriverManager;
 use Symfony\Component\Dotenv\Dotenv;
-use BotMan\BotMan\BotMan;
-use PhpMx\Drivers\CustomDriver;
-use PhpMx\Router;
+use PhpMx\Factories\ApplicationFactory;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -19,11 +16,6 @@ $loader = new YamlFileLoader($containerBuilder, new FileLocator(__DIR__ . '/../c
 $loader->load('services.yaml');
 $containerBuilder->compile(true);
 
-$botman = $containerBuilder->get(BotMan::class);
-$router = $containerBuilder->get(Router::class);
-
-DriverManager::loadDriver(CustomDriver::class);
-$botman->loadDriver('Slack');
-$router->mount();
-
-$botman->listen();
+($application = new ApplicationFactory($containerBuilder))
+    ->createAppByUri($_SERVER['REQUEST_URI'])
+    ->execute();
