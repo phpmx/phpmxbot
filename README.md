@@ -29,3 +29,9 @@ Please feel free to submit pull requests or open issues.
 ## Code of Conduct
 
 Help us keep this project open and inclusive. Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Run tests
+
+Once the container of bot it's running on background please type the next command:
+
+`docker-compose exec bot ../vendor/bin/phpunit ../tests`

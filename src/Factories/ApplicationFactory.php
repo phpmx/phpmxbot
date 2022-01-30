@@ -2,11 +2,9 @@
 
 namespace PhpMx\Factories;
 
-use BotMan\BotMan\BotMan;
 use PhpMx\Application\ApiApplication;
 use PhpMx\Application\ApplicationInterface;
 use PhpMx\Application\BotApplication;
-use PhpMx\Router;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class ApplicationFactory
@@ -21,14 +19,9 @@ class ApplicationFactory
     public function createAppByUri(string $uri): ApplicationInterface
     {
         if (str_starts_with($uri, '/api')) {
-            return new ApiApplication();
+            return $this->containerBuilder->get(ApiApplication::class);
         }
 
-        /** @var BotMan $botman */
-        $botman = $this->containerBuilder->get(BotMan::class);
-
-        /** @var Router $router */
-        $router = $this->containerBuilder->get(Router::class);
-        return new BotApplication($botman, $router);
+        return $this->containerBuilder->get(BotApplication::class);
     }
 }
