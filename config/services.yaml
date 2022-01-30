@@ -41,4 +41,9 @@ services:
     arguments:
       $containerBuilder: '@service_container'
 
+  PhpMx\Http\Kernel:
+    arguments:
+      - "%env(ENVIRONMENT)%"
+      - "%env(DEBUG)%"
+
   PhpMx\Router:

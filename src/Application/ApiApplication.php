@@ -7,12 +7,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ApiApplication implements ApplicationInterface
 {
+    private Kernel $kernel;
+
+    public function __construct(Kernel $kernel)
+    {
+        $this->kernel = $kernel;
+    }
+
     public function execute()
     {
-        $kernel = new Kernel($_ENV['ENVIRONMENT'], $_ENV['DEBUG']);
         $request = Request::createFromGlobals();
-        $response = $kernel->handle($request);
+        $response = $this->kernel->handle($request);
         $response->send();
-        $kernel->terminate($request, $response);
+        $this->kernel->terminate($request, $response);
     }
 }

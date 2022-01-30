@@ -5,9 +5,9 @@ namespace PhpMx\Tests\Feature\Factories;
 use PhpMx\Application\ApiApplication;
 use PhpMx\Application\BotApplication;
 use PhpMx\Factories\ApplicationFactory;
-use PhpMx\Tests\Feature\FunctionalTest;
+use PhpMx\Tests\Feature\Functional;
 
-class ApplicationFactoryTest extends FunctionalTest
+class ApplicationFactoryTest extends Functional
 {
     public function testReturnBotApplication()
     {

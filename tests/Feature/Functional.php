@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Dotenv\Dotenv;
 
-class FunctionalTest extends TestCase
+class Functional extends TestCase
 {
     protected ContainerBuilder $container;
 
