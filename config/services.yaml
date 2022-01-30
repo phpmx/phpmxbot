@@ -46,4 +46,9 @@ services:
       - "%env(ENVIRONMENT)%"
       - "%env(DEBUG)%"
 
+  PhpMx\Http\Controller\Api\:
+    resource: "../src/Http/Controller/Api/*"
+    tags:
+      - "controller.service_arguments"
+
   PhpMx\Router:

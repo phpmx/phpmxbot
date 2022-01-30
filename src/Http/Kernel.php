@@ -1,6 +1,7 @@
 <?php
 
 namespace PhpMx\Http;
+use PhpMx\Http\Controller\Api\LeaderBoardController;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
@@ -17,7 +18,7 @@ class Kernel extends BaseKernel
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
         $routes->add('api.leaderboard', '/api/leaderboard')
-            ->controller('PhpMx\Http\Api\Controller\LeaderBoardController');
+            ->controller(LeaderBoardController::class);
     }
 
     public function registerBundles()
@@ -29,9 +30,7 @@ class Kernel extends BaseKernel
 
     protected function configureContainer(ContainerConfigurator $c): void
     {
-        // PHP equivalent of config/packages/framework.yaml
-        $c->extension('framework', [
-            'secret' => 'S0ME_SECRET'
-        ]);
+        $confDir = $this->getProjectDir().'/config';
+        $c->import($confDir . '/*');
     }
 }
