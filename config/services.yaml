@@ -27,4 +27,28 @@ services:
     tags:
       - services
 
+  PhpMx\Application\:
+    resource: "../src/Application/*"
+    tags:
+      - application
+
+  PhpMx\Factories\:
+    resource: "../src/Factories/*"
+    tags:
+      - factories
+
+  PhpMx\Factories\ApplicationFactory:
+    arguments:
+      $containerBuilder: '@service_container'
+
+  PhpMx\Http\Kernel:
+    arguments:
+      - "%env(ENVIRONMENT)%"
+      - "%env(DEBUG)%"
+
+  PhpMx\Http\Controller\Api\:
+    resource: "../src/Http/Controller/Api/*"
+    tags:
+      - "controller.service_arguments"
+
   PhpMx\Router:
